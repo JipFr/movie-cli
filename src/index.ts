@@ -57,7 +57,7 @@ async function main() {
 			{
 				type: "select",
 				name: "id",
-				message: "Pick a stream",
+				message: "Pick a movie or show",
 				choices: matchedResults.map((v, i) => {
 					return {
 						title: v.title,
