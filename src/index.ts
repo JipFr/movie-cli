@@ -126,9 +126,12 @@ function attemptOpen(videoUrl: string) {
 	const now = Date.now();
 
 	// Define shell commands to attempt
+	const fullUrl = `https://xenodochial-mestorf-a8f181.netlify.app/?https://hidden-inlet-27205.herokuapp.com/${videoUrl}`
 	const commands = [
 		`vlc ${videoUrl}`,
 		`/Applications/VLC.app/Contents/MacOS/VLC ${videoUrl}`,
+		`/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app=${fullUrl}`,
+		`open ${fullUrl}`,
 		`open -a Safari ${videoUrl}`,
 		`open ${videoUrl}`,
 	];
