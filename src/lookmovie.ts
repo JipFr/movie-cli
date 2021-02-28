@@ -1,4 +1,4 @@
-k// There's no error handling
+// There's no error handling
 // I know, and I'm sorry.... Probbaly :D
 
 import fetch from "node-fetch";

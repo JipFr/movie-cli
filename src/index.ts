@@ -1,5 +1,4 @@
 // Imports
-import yargs from "yargs";
 import fetch from "node-fetch";
 import Fuse from "fuse.js";
 import * as json5 from "json5";
@@ -39,8 +38,6 @@ async function main() {
 	// Remove movies if the user defined a season and episode
 	if (season && episode) {
 		results = results.filter((v) => v.type === "show");
-	} else {
-		results = results.filter((v) => v.type === "movie");
 	}
 
 	// @ts-ignore
