@@ -69,7 +69,15 @@ async function getVideoUrl(config: Config): Promise<string> {
 		const videoOpts = await fetch(url).then((d) => d.json());
 
 		// Find video URL and return it (with a check for a full url if needed)
-		const videoUrl = videoOpts.auto || videoOpts["720"];
+		const opts = ["1080p", "720p", "480p", "auto"]
+
+		let videoUrl = "";
+		for(let res of opts) {
+			if(videoOpts[res] && !videoOpts[res].includes('dummy') && !videoOpts[res].includes('earth-1984') && !videoUrl) {
+				videoUrl = videoOpts[res]
+			}
+		}
+
 		return videoUrl.startsWith("/") ? `${cfg.base}${videoUrl}` : videoUrl;
 	}
 

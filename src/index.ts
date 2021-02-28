@@ -133,6 +133,7 @@ function attemptOpen(videoUrl: string) {
 	const commands = [
 		`vlc ${videoUrl}`,
 		`/Applications/VLC.app/Contents/MacOS/VLC ${videoUrl}`,
+		`"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" ${videoUrl}`,
 		`/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app=${fullUrl}`,
 		`open ${fullUrl}`,
 		`open -a Safari ${videoUrl}`,
