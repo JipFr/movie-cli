@@ -4,9 +4,11 @@ import Fuse from "fuse.js";
 import * as json5 from "json5";
 import getVideoUrl from "./lookmovie";
 import { exec } from "child_process";
+import prompt from "prompts";
+import { match } from "assert";
 
 // Process args
-const [searchTerm, season, episode] = process.argv.slice(2)
+const [searchTerm, season, episode] = process.argv.slice(2);
 let commandIndex = 0;
 
 async function main() {
@@ -49,7 +51,26 @@ async function main() {
 		.map((result) => result.item);
 
 	// Now findthe first item and do the thing
-	const toShow = matchedResults[0];
+	let toShow;
+	if(matchedResults.length > 1) {
+		const response = await prompt([
+			{
+				type: "select",
+				name: "id",
+				message: "Pick a stream",
+				choices: matchedResults.map((v, i) => {
+					return {
+						title: v.title,
+						value: i,
+					};
+				}),
+			},
+		]);
+		toShow = matchedResults[response.id];
+	} else {
+		toShow = matchedResults[0];
+	}
+	
 
 	if (!toShow) {
 		console.error("Unable to find that... Sorry!");
@@ -83,10 +104,12 @@ async function main() {
 			return v.season == season && v.episode == episode;
 		});
 		if (episodeObj) {
-			console.log(`Finding streams for ${toShow.title} ${season}x${episode}: ${episodeObj.title}`)
-			id = episodeObj.id_episode
-			relevantEpisode = episodeObj
-		};
+			console.log(
+				`Finding streams for ${toShow.title} ${season}x${episode}: ${episodeObj.title}`
+			);
+			id = episodeObj.id_episode;
+			relevantEpisode = episodeObj;
+		}
 	}
 
 	// Check ID
@@ -118,8 +141,6 @@ async function main() {
 
 	const videoUrl = await getVideoUrl(reqObj);
 	console.log(videoUrl);
-	// const pageUrl = `https://xenodochial-mestorf-a8f181.netlify.app/?https://hidden-inlet-27205.herokuapp.com/${videoUrl}`
-	// exec(`/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --app=${pageUrl}`)
 	attemptOpen(videoUrl, relevantEpisode, data);
 }
 
@@ -129,8 +150,10 @@ function attemptOpen(videoUrl: string, episode, data) {
 	const now = Date.now();
 
 	// Define shell commands to attempt
-	const fullUrl = `https://xenodochial-mestorf-a8f181.netlify.app/?https://hidden-inlet-27205.herokuapp.com/${videoUrl}`
-	const title = `${data.title}${episode.title ? `: ${episode.title}`:''} (${data.year})`
+	const fullUrl = `https://xenodochial-mestorf-a8f181.netlify.app/?https://hidden-inlet-27205.herokuapp.com/${videoUrl}`;
+	const title = `${data.title}${episode?.title ? `: ${episode.title}` : ""} (${
+		data.year
+	})`;
 	const commands = [
 		`vlc ${videoUrl} --meta-title=${title}`,
 		`/Applications/VLC.app/Contents/MacOS/VLC ${videoUrl} --meta-title="${title}"`,
