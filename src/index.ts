@@ -31,10 +31,17 @@ async function main() {
 	).then((d) => d.json());
 
 	// Map results to array
-	const results = [
+	let results = [
 		...movieSearchRes.result.map((v) => ({ ...v, type: "movie" })),
 		...showSearchRes.result.map((v) => ({ ...v, type: "show" })),
 	];
+
+	// Remove movies if the user defined a season and episode
+	if (season && episode) {
+		results = results.filter((v) => v.type === "show");
+	} else {
+		results = results.filter((v) => v.type === "movie");
+	}
 
 	// @ts-ignore
 	const fuse = new Fuse(results, {
@@ -131,7 +138,7 @@ function attemptOpen(videoUrl: string) {
 
 	// Find relevant one and execute it
 	const command = commands[commandIndex];
-	if(command) {
+	if (command) {
 		exec(command, (err, _stdout, stderr) => {
 			const diff = Date.now() - now;
 			if ((err || stderr) && diff < maxTimeout) {
@@ -148,7 +155,7 @@ function attemptOpen(videoUrl: string) {
 			}
 		});
 	} else {
-		console.error("Looks like everything failed, weird.")
+		console.error("Looks like everything failed, weird.");
 	}
 }
 
