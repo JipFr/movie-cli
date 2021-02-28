@@ -75,6 +75,7 @@ async function main() {
 
 	// Find the relevant id
 	let id = null;
+	let relevantEpisode;
 	if (toShow.type === "movie") {
 		id = data.id_movie;
 	} else if (toShow.type === "show") {
@@ -84,6 +85,7 @@ async function main() {
 		if (episodeObj) {
 			console.log(`Finding streams for ${toShow.title} ${season}x${episode}: ${episodeObj.title}`)
 			id = episodeObj.id_episode
+			relevantEpisode = episodeObj
 		};
 	}
 
@@ -118,20 +120,21 @@ async function main() {
 	console.log(videoUrl);
 	// const pageUrl = `https://xenodochial-mestorf-a8f181.netlify.app/?https://hidden-inlet-27205.herokuapp.com/${videoUrl}`
 	// exec(`/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --app=${pageUrl}`)
-	attemptOpen(videoUrl);
+	attemptOpen(videoUrl, relevantEpisode, data);
 }
 
-function attemptOpen(videoUrl: string) {
+function attemptOpen(videoUrl: string, episode, data) {
 	// Bit of a hack, but oh well.
 	const maxTimeout = 5e3;
 	const now = Date.now();
 
 	// Define shell commands to attempt
 	const fullUrl = `https://xenodochial-mestorf-a8f181.netlify.app/?https://hidden-inlet-27205.herokuapp.com/${videoUrl}`
+	const title = `${data.title}${episode.title ? `: ${episode.title}`:''} (${data.year})`
 	const commands = [
-		`vlc ${videoUrl}`,
-		`/Applications/VLC.app/Contents/MacOS/VLC ${videoUrl}`,
-		`"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" ${videoUrl}`,
+		`vlc ${videoUrl} --meta-title=${title}`,
+		`/Applications/VLC.app/Contents/MacOS/VLC ${videoUrl} --meta-title="${title}"`,
+		`"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" ${videoUrl} --meta-title="${title}"`,
 		`/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app=${fullUrl}`,
 		`open ${fullUrl}`,
 		`open -a Safari ${videoUrl}`,
@@ -151,7 +154,7 @@ function attemptOpen(videoUrl: string) {
 					diff,
 					"ms, trying next"
 				);
-				attemptOpen(videoUrl);
+				attemptOpen(videoUrl, episode, data);
 			} else {
 				console.log("Ended");
 			}
