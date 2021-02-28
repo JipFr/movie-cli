@@ -69,7 +69,7 @@ async function getVideoUrl(config: Config): Promise<string> {
 		const videoOpts = await fetch(url).then((d) => d.json());
 
 		// Find video URL and return it (with a check for a full url if needed)
-		const opts = ["1080p", "720p", "480p", "auto"]
+		const opts = ["1080p", "1080", "720p", "720", "480p", "480", "auto"]
 
 		let videoUrl = "";
 		for(let res of opts) {
@@ -77,6 +77,8 @@ async function getVideoUrl(config: Config): Promise<string> {
 				videoUrl = videoOpts[res]
 			}
 		}
+
+		console.log(videoOpts)
 
 		return videoUrl.startsWith("/") ? `${cfg.base}${videoUrl}` : videoUrl;
 	}
