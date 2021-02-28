@@ -6,9 +6,7 @@ import getVideoUrl from "./lookmovie";
 import { exec } from "child_process";
 
 // Process args
-const [searchTerm, season, episode] = process.argv.filter(
-	(v) => !v.startsWith("/")
-);
+const [searchTerm, season, episode] = process.argv.slice(2)
 let commandIndex = 0;
 
 async function main() {
