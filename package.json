@@ -1,0 +1,25 @@
+{
+  "name": "movie-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node .",
+    "build": "etsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^14.14.31",
+    "@types/node-fetch": "^2.5.8",
+    "@types/yargs": "^16.0.0",
+    "esbuild": "^0.8.53",
+    "esbuild-node-tsc": "^1.2.0",
+    "fuse.js": "^6.4.6",
+    "json5": "^2.2.0",
+    "node-fetch": "^2.6.1",
+    "ts-node": "^9.1.1",
+    "yargs": "^16.2.0"
+  }
+}
