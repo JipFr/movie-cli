@@ -70,6 +70,12 @@ async function main() {
 	} else {
 		toShow = matchedResults[0];
 	}
+
+
+	if(toShow.type === 'show' && (!season || !episode)) {
+		console.error('For this TV show, please provide a season and episode to watch.')
+		return;
+	}
 	
 
 	if (!toShow) {
