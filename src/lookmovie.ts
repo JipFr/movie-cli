@@ -78,8 +78,6 @@ async function getVideoUrl(config: Config): Promise<string> {
 			}
 		}
 
-		console.log(videoOpts)
-
 		return videoUrl.startsWith("/") ? `${cfg.base}${videoUrl}` : videoUrl;
 	}
 
