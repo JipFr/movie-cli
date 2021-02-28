@@ -83,7 +83,10 @@ async function main() {
 		const episodeObj = data.seasons.find((v) => {
 			return v.season == season && v.episode == episode;
 		});
-		if (episodeObj) id = episodeObj.id_episode;
+		if (episodeObj) {
+			console.log(`Finding streams for ${toShow.title} ${season}x${episode}: ${episodeObj.title}`)
+			id = episodeObj.id_episode
+		};
 	}
 
 	// Check ID
