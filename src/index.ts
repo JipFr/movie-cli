@@ -52,7 +52,7 @@ async function main() {
 
 	// Now findthe first item and do the thing
 	let toShow;
-	if(matchedResults.length > 1) {
+	if (matchedResults.length > 1) {
 		const response = await prompt([
 			{
 				type: "select",
@@ -71,15 +71,15 @@ async function main() {
 		toShow = matchedResults[0];
 	}
 
-
-	if(toShow.type === 'show' && (!season || !episode)) {
-		console.error('For this TV show, please provide a season and episode to watch.')
-		return;
-	}
-	
-
 	if (!toShow) {
 		console.error("Unable to find that... Sorry!");
+		return;
+	}
+
+	if (toShow.type === "show" && (!season || !episode)) {
+		console.error(
+			"For this TV show, please provide a season and episode to watch."
+		);
 		return;
 	}
 
