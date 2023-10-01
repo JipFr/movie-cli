@@ -12,6 +12,7 @@ const [searchTerm, season, episode] = process.argv.slice(2);
 let commandIndex = 0;
 
 async function main() {
+	console.log(searchTerm);
 	if (season && !episode) {
 		console.error("Missing episode");
 		return;
@@ -19,12 +20,12 @@ async function main() {
 
 	// Do search, merge TV and movie results
 	const movieSearchRes = await fetch(
-		`https://lookmovie.io/api/v1/movies/search/?q=${encodeURIComponent(
+		`https://lookmovie2.to/api/v1/movies/do-search/?q=${encodeURIComponent(
 			searchTerm
 		)}`
 	).then((d) => d.json());
 	const showSearchRes = await fetch(
-		`https://lookmovie.io/api/v1/shows/search/?q=${encodeURIComponent(
+		`https://lookmovie2.to/api/v1/shows/do-search/?q=${encodeURIComponent(
 			searchTerm
 		)}`
 	).then((d) => d.json());
@@ -39,6 +40,8 @@ async function main() {
 	if (season && episode) {
 		results = results.filter((v) => v.type === "show");
 	}
+
+	console.log(results);
 
 	// @ts-ignore
 	const fuse = new Fuse(results, {
@@ -86,7 +89,7 @@ async function main() {
 	console.log(`Scraping the ${toShow.type} "${toShow.title}"`);
 
 	// ! Now we get the ID and stuff we need
-	const url = `https://lookmovie.io/${toShow.type}s/view/${toShow.slug}`;
+	const url = `https://www.lookmovie2.to/${toShow.type}s/play/${toShow.slug}`;
 	const pageReq = await fetch(url).then((d) => d.text());
 
 	// Extract and parse JSON
@@ -131,12 +134,14 @@ async function main() {
 			slug: toShow.slug,
 			episodeId: id,
 			type: "tv",
+			...data,
 		};
 	} else if (toShow.type === "movie") {
 		reqObj = {
 			slug: toShow.slug,
 			movieId: id,
 			type: "movie",
+			...data,
 		};
 	}
 
@@ -146,7 +151,6 @@ async function main() {
 	}
 
 	const videoUrl = await getVideoUrl(reqObj);
-	console.log(videoUrl);
 	attemptOpen(videoUrl, relevantEpisode, data);
 }
 
